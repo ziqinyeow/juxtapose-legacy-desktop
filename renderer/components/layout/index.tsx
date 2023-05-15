@@ -74,15 +74,30 @@ export default function Layout({ children }: Props) {
 
   return (
     <>
-      <div className="grid h-[100vh] md:grid-cols-[200px_auto]">
-        <div className="bg-gray-50">
+      <div
+        className={cn([
+          "grid h-[100vh] md:grid-cols-[200px_auto]",
+          collapse
+            ? "grid-cols-[72px_auto] md:grid-cols-[72px_auto]"
+            : "grid-cols-[150px_auto]",
+        ])}
+      >
+        <div
+          className={cn([
+            "bg-gray-50 transition-transform .3s ease-in-out md:-translate-x-0",
+            collapse && "-translate-x-0",
+          ])}
+        >
           <div className="grid grid-rows-[64px_auto]">
             <div className="flex items-center justify-end h-full gap-2 px-4">
               <button
                 onClick={() => {
                   setCollapse(!collapse);
                 }}
-                className="p-1 text-gray-600 bg-gray-200 rounded-lg cursor-pointer hover:text-gray-800 hover:bg-gray-300"
+                className={cn([
+                  "hidden p-1 text-gray-600 bg-gray-200 rounded-lg cursor-pointer md:block hover:text-gray-800 hover:bg-gray-300",
+                  collapse && "md:hidden",
+                ])}
               >
                 <PanelRight className="w-[14px] h-[14px]" />
               </button>
@@ -92,12 +107,15 @@ export default function Layout({ children }: Props) {
                 <Link key={i} href={n?.link}>
                   <a
                     className={cn([
-                      "flex items-center w-full gap-2 px-4 py-2 hover:text-gray-900 text-xs text-left transition-all rounded-lg hover:bg-gray-100",
-                      n?.link === router.pathname && "bg-gray-100",
+                      "flex items-center w-full gap-2 hover:ring-2 ring-gray-200 hover:text-black text-gray-400 text-xs text-left transition-all rounded-lg hover:bg-gray-100",
+                      n?.link === router.pathname && "bg-gray-100 text-black",
+                      collapse
+                        ? "justify-center py-3"
+                        : "px-4 py-2 md:py-2 md:justify-start",
                     ])}
                   >
-                    <span className="text-gray-600">{n?.icon}</span>
-                    <span>{n?.name}</span>
+                    <span className="">{n?.icon}</span>
+                    {!collapse && <span className="">{n?.name}</span>}
                   </a>
                 </Link>
               ))}
@@ -105,14 +123,25 @@ export default function Layout({ children }: Props) {
           </div>
         </div>
         <div className="grid grid-rows-[64px_auto]">
-          <div className="flex items-center justify-between h-full px-4 border-b">
+          <div className="flex items-center justify-between h-full px-4">
             <div className="flex items-center">
-              <History className="mr-4" />
-              <div className="flex items-center gap-2 text-xs">
+              <button
+                onClick={() => {
+                  setCollapse(!collapse);
+                }}
+                className={cn([
+                  "block p-1 mr-5 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-800 hover:bg-gray-100",
+                  collapse && "md:block",
+                ])}
+              >
+                <PanelRight className="w-[14px] h-[14px]" />
+              </button>
+              {/* <History className="flex items-center mr-4" /> */}
+              <div className="flex items-center gap-2 ml-3 text-xs">
                 {routes?.map((p, i) => (
                   <h6 key={i} className="flex items-center gap-2">
                     {/* <Str2Icon str={"home"} className="w-4 h-4" /> */}
-                    <span>{p}</span>
+                    <span>{p.charAt(0).toUpperCase() + p.slice(1)}</span>
                     {i + 1 !== routes.length && <span>/</span>}
                   </h6>
                 ))}
