@@ -75,11 +75,12 @@ export default (
     ...options,
     // autoHideMenuBar: true,
     titleBarStyle: "hidden",
-    minWidth: 800,
+    minWidth: 1000,
     minHeight: 500,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      webSecurity: false,
       ...options.webPreferences,
     },
   };

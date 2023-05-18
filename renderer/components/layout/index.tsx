@@ -1,8 +1,7 @@
-import { ArrowLeft, Home, PanelRight, Video } from "lucide-react";
+import { ArrowLeft, Folder, Home, PanelRight, Video } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
-import Str2Icon from "../Str2Icon";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import UserAvatar from "../ui/useravatar";
@@ -22,9 +21,9 @@ export const nav = [
     link: "/home",
   },
   {
-    name: "Video",
-    icon: <Video className="w-4 h-4" />,
-    link: "/video",
+    name: "Media",
+    icon: <Folder className="w-4 h-4" />,
+    link: "/media",
   },
 ];
 
@@ -76,16 +75,17 @@ export default function Layout({ children }: Props) {
     <>
       <div
         className={cn([
-          "grid h-[100vh] md:grid-cols-[200px_auto]",
+          "grid h-[100vh] relative lg:grid-cols-[200px_auto]",
           collapse
-            ? "grid-cols-[72px_auto] md:grid-cols-[72px_auto]"
-            : "grid-cols-[150px_auto]",
+            ? "grid-cols-[72px_auto] lg:grid-cols-[72px_auto]"
+            : "grid-cols-[160px_auto]",
         ])}
       >
+        <div />
         <div
           className={cn([
-            "bg-gray-50 transition-transform .3s ease-in-out md:-translate-x-0",
-            collapse && "-translate-x-0",
+            "bg-gray-50 transition-transform lg:w-[200px] h-[100vh] fixed top-0 left-0 .3s ease-in-out md:-translate-x-0",
+            collapse ? "-translate-x-0 w-[72px] lg:w-[72px]" : "w-[160px]",
           ])}
         >
           <div className="grid grid-rows-[64px_auto]">
@@ -102,7 +102,7 @@ export default function Layout({ children }: Props) {
                 <PanelRight className="w-[14px] h-[14px]" />
               </button>
             </div>
-            <div className="px-4 space-y-2">
+            <div className="px-4 pt-2 space-y-2">
               {nav?.map((n, i) => (
                 <Link key={i} href={n?.link}>
                   <a
@@ -123,7 +123,11 @@ export default function Layout({ children }: Props) {
           </div>
         </div>
         <div className="grid grid-rows-[64px_auto]">
-          <div className="flex items-center justify-between h-full px-4">
+          <div
+            className={cn([
+              "z-[100] sticky top-0 w-full h-[64px] flex items-center justify-between px-4 bg-white",
+            ])}
+          >
             <div className="flex items-center">
               <button
                 onClick={() => {
@@ -137,7 +141,7 @@ export default function Layout({ children }: Props) {
                 <PanelRight className="w-[14px] h-[14px]" />
               </button>
               {/* <History className="flex items-center mr-4" /> */}
-              <div className="flex items-center gap-2 ml-3 text-xs">
+              <div className="flex items-center gap-2 ml-2 text-xs">
                 {routes?.map((p, i) => (
                   <h6 key={i} className="flex items-center gap-2">
                     {/* <Str2Icon str={"home"} className="w-4 h-4" /> */}
@@ -152,7 +156,7 @@ export default function Layout({ children }: Props) {
               <UserAvatar />
             </div>
           </div>
-          <div>{children}</div>
+          <div className="w-full h-full pt-2 overflow-auto">{children}</div>
         </div>
       </div>
     </>
